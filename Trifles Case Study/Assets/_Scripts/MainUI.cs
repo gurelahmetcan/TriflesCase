@@ -10,6 +10,11 @@ public class MainUI : MonoBehaviour
     
     public TextMeshProUGUI timerText;
     public float timeRemaining = 90f;
+
+    public GameObject ToiletSwipe;
+    public GameObject BouncingBall;
+
+    private bool m_IsBouncingBall; 
     
     #endregion
 
@@ -40,6 +45,12 @@ public class MainUI : MonoBehaviour
             // Stop the timer when time runs out
             timeRemaining = 0;
             Debug.Log("Time's up!");
+
+            m_IsBouncingBall = !m_IsBouncingBall;
+            
+            BouncingBall.SetActive(m_IsBouncingBall);
+            ToiletSwipe.SetActive(!m_IsBouncingBall);
+            timeRemaining = 90f;
         }
     }
 
