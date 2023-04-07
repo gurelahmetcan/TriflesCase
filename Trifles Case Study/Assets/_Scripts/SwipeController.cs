@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SwipeController : MonoBehaviour
 {
+    #region Fields
+    
     // Takla atacak obje
     public GameObject cylinder;
 
@@ -32,7 +34,20 @@ public class SwipeController : MonoBehaviour
     
     private int count = 0;
     
+    #endregion
+
+    #region Unity Methods
+    
     private void Update()
+    {
+        ToilerPaperSwipe();
+    }
+
+    #endregion
+
+    #region Private Methods
+    
+    private void ToilerPaperSwipe()
     {
         // Swipe kontrolü
         if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began)
@@ -96,5 +111,8 @@ public class SwipeController : MonoBehaviour
             }
         }
     }
+
+    #endregion
+
 }
 

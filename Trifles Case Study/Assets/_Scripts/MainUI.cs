@@ -6,20 +6,23 @@ using UnityEngine.UI;
 
 public class MainUI : MonoBehaviour
 {
+    #region Fields
+    
     public TextMeshProUGUI timerText;
     public float timeRemaining = 90f;
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    #endregion
 
-    // Update is called once per frame
+    #region Unity Methods
+    
     void Update()
     {
         RunTimer();
     }
+
+    #endregion
+
+    #region Private Methods
 
     private void RunTimer()
     {
@@ -39,4 +42,6 @@ public class MainUI : MonoBehaviour
             Debug.Log("Time's up!");
         }
     }
+
+    #endregion
 }
