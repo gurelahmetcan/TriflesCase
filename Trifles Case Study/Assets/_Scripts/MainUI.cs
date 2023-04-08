@@ -3,18 +3,24 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class MainUI : MonoBehaviour
 {
     #region Fields
     
-    public TextMeshProUGUI timerText;
-    public float timeRemaining = 90f;
+    [SerializeField] private TextMeshProUGUI m_TimerText;
+    [SerializeField] private TextMeshProUGUI m_LevelSuccessText;
+    [SerializeField] private float timeRemaining = 90f;
 
-    public GameObject ToiletSwipe;
-    public GameObject BouncingBall;
+    [SerializeField] private GameObject ToiletSwipe;
+    [SerializeField] private GameObject BouncingBall;
 
-    private bool m_IsBouncingBall; 
+    private bool m_IsBouncingBall;
+    private float m_ConstantTime = 90f;
+
+    private bool m_TweenStarted;
+    private Sequence m_LevelSuccessSequence;
     
     #endregion
 
@@ -38,19 +44,38 @@ public class MainUI : MonoBehaviour
 
         // Display the time in the format "01:30"
         string timeString = string.Format("{0:00}:{1:00}", minutes, seconds);
-        timerText.text = timeString;
+        m_TimerText.text = timeString;
 
-        if (timeRemaining <= 0)
+        if (timeRemaining <= 0 && !m_TweenStarted)
         {
             // Stop the timer when time runs out
             timeRemaining = 0;
-            Debug.Log("Time's up!");
+            m_TimerText.gameObject.SetActive(false);
+            m_TweenStarted = true;
 
-            m_IsBouncingBall = !m_IsBouncingBall;
+            if (m_LevelSuccessSequence != null)
+            {
+                m_LevelSuccessSequence = null;
+                m_LevelSuccessSequence.Kill();
+            }
+
+            m_LevelSuccessSequence = DOTween.Sequence();
             
-            BouncingBall.SetActive(m_IsBouncingBall);
-            ToiletSwipe.SetActive(!m_IsBouncingBall);
-            timeRemaining = 90f;
+            m_LevelSuccessText.gameObject.SetActive(true);
+            m_LevelSuccessSequence
+                .Append(m_LevelSuccessText.gameObject.GetComponent<RectTransform>().DOScale(1.2f, 0.5f)
+                    .SetLoops(3, LoopType.Yoyo)).Append(m_LevelSuccessText.DOFade(0f, 0.5f)).OnComplete((
+                    () =>
+                    {
+                        m_IsBouncingBall = !m_IsBouncingBall;
+                        BouncingBall.SetActive(m_IsBouncingBall);
+                        ToiletSwipe.SetActive(!m_IsBouncingBall);
+                        timeRemaining = m_ConstantTime;
+                        m_TimerText.gameObject.SetActive(true);
+                        m_LevelSuccessText.gameObject.SetActive(false);
+                        m_LevelSuccessText.DOFade(1f, 0.1f);
+                        m_TweenStarted = false;
+                    }));
         }
     }
 
