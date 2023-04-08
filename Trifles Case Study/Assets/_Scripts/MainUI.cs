@@ -74,6 +74,7 @@ public class MainUI : MonoBehaviour
                         m_TimerText.gameObject.SetActive(true);
                         m_LevelSuccessText.gameObject.SetActive(false);
                         m_LevelSuccessText.DOFade(1f, 0.1f);
+                        m_LevelSuccessText.gameObject.GetComponent<RectTransform>().localScale = Vector3.one;
                         m_TweenStarted = false;
                     }));
         }
